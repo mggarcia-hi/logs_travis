@@ -52,7 +52,7 @@ public class SimpaticoResourceTwitter {
     @Path("/prueba_get")
     @Produces(MediaType.APPLICATION_JSON)
     public Response find_formend(@Context HttpServletRequest request, @Context UriInfo uriInfo) {
-
+    	int i=5;
     	try {
     		// Copy map (it is unmodificable)
 	    	Map<String, List<String>> queryParamsUnmodificable = uriInfo.getQueryParameters();
