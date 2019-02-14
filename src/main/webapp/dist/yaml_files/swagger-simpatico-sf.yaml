@@ -1,0 +1,248 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Simpatico SF API"
+host: "simpatico.hi-iberia.es:4570"
+basePath: "/simpatico/api/sf"
+schemes:
+- "https"
+produces:
+- "application/json"
+paths:
+  /find:
+    get:
+      tags:
+      - "find"
+      summary: "find data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "words"
+        in: "query"
+        description: "Comma separated words. Espaces are allowed."
+        required: false
+        type: "string"
+      - name: "sortasc"
+        in: "query"
+        description: "Created time ascending sort."
+        required: false
+        type: "string"
+      - name: "sortdesc"
+        in: "query"
+        description: "Created time descending sort."
+        required: false
+        type: "string"
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of results."
+        required: false
+        type: "number"
+        format: "integer"
+      responses:
+        200:
+          description: "An array of documents and how many are."
+          schema:
+            $ref: "#/definitions/Response_200"
+        400:
+          description: "Bad request."
+          schema:
+            $ref: "#/definitions/Message"
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /insert:
+    post:
+      tags:
+      - "insert data"
+      summary: "insert"
+      produces:
+      - "application/json"
+      parameters:
+      - name: params 
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/uec_params'
+      responses:
+        200:
+          description: "A message information that data was updated."
+          schema:
+            $ref: "#/definitions/Message"
+        201:
+          description: "A message information that data was inserted."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+          schema:
+            $ref: "#/definitions/Message"
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"    
+  /update:
+    put:
+      tags:
+      - "update"
+      summary: "update data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: params 
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Document_Update'
+      responses:
+        200:
+          description: "A message information that data was updated."
+          schema:
+            $ref: "#/definitions/Message"
+        201:
+          description: "A message information that data was inserted."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+          schema:
+            $ref: "#/definitions/Message"
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /remove:
+    delete:
+      tags:
+      - "remove"
+      summary: "remove data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: params 
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Document_Delete'
+      responses:
+        200:
+          description: "Message data removed"
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+          schema:
+            $ref: "#/definitions/Message"
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /selectdialog:
+    get:
+      tags:
+      - "selectdialog"
+      description: "Generate form dialog"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "query"
+        type: "string"
+        description: "Unique identifier representing a specific document."
+        required: true
+      - name: "ctz"
+        in: "query"
+        type: "boolean"
+        description: "If citizenpedia was used"
+        required: true
+      - name: "simpl"
+        in: "query"
+        type: "boolean"
+        description: "If simplification was used"
+        required: true
+      - name: "timeout"
+        in: "query"
+        type: "boolean"
+        description: "If timout exceeded"
+        required: true
+      responses:
+        200:
+          description: "A dialog."
+          schema:
+            $ref: "#/definitions/Message"
+  /test:
+    get:
+      tags:
+      - "test"
+      description: ""
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "A message to check available API."
+          schema:
+            $ref: "#/definitions/Message"
+definitions:
+  Document:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier representing a specific document."
+      score:
+        type: "number"
+        format: "float"
+        description: "Relevancy in finding."
+      data:
+        type: "string"
+        description: "document data."
+  Document_Update:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier representing a specific document."
+      content:
+        type: "object"
+        description: "Valid json like used in insert method."
+        properties: {}
+  Document_Delete:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier representing a specific document."
+  Response_200:
+    properties:
+      count:
+        type: "number"
+        format: "int"
+        description: "Unique identifier representing a specific document."
+      results:
+        type: "array"
+        items:
+          $ref: "#/definitions/Document"   
+  Message:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+  uec_params:
+    type: "object"
+    description: once the user finished with the session the Session Feedback component ask for some satisfaction measures.
+    properties:
+      userID:
+        type: string
+        description: user id
+      e-serviceID:
+        type: string
+        description: task description
+      complexity:
+        type: string
+        description: component
+    required:
+      - userID
+      - e-serviceID
+      - complexity      

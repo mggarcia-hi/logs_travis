@@ -1,0 +1,417 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Simpatico Logs API"
+host: "simpatico.hi-iberia.es:4570"
+basePath: "/simpatico/api/logs"
+schemes:
+- "https"
+produces:
+- "application/json"
+paths:
+  /reduction-time-spent-all-users:
+    post:
+      tags:
+      - "Time spent"
+      summary: "Time spent completing form"
+      description: "Get increase or decrease percentage between time spent by all users using Simpatico and those who do not use Simpatico.\nDates in UTC String"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON to insert."
+        required: true
+        schema:
+          $ref: "#/definitions/Message_KPI_All_Users_Time"
+      responses:
+        200:
+          description: "A percentage or Infinity."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /reduction-time-spent:
+    post:
+      tags:
+      - "Time spent"
+      summary: "Time spent completing form"
+      description: "Get increase or decrease percentage between time spent by users using Simpatico and those who do not use Simpatico.\nDates in UTC String"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON to insert."
+        required: true
+        schema:
+          $ref: "#/definitions/Message_KPI_Time"
+      responses:
+        200:
+          description: "A percentage or Infinity."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /percentage-complete-autonomously:
+    post:
+      tags:
+      - "Complete autonomously"
+      summary: "Time spent completing form"
+      description: "Get increase or decrease percentage between users that fill out completely the form using Simpatico and those who do not use Simpatico.\n"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON to insert."
+        required: true
+        schema:
+          $ref: "#/definitions/Message_KPI_Complete_Form"
+      responses:
+        200:
+          description: "A percentage or Infinity."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"       
+  /percentage-complete-autonomously-all-users:
+    post:
+      tags:
+      - "Complete autonomously"
+      summary: "Time spent completing form"
+      description: "Get increase or decrease percentage between users that fill out completely the form using Simpatico and those who do not use Simpatico.\n"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON to insert."
+        required: true
+        schema:
+          $ref: "#/definitions/Message_KPI_All_Users_Complete_Form"
+      responses:
+        200:
+          description: "A percentage or Infinity."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"                 
+  /find:
+    get:
+      tags:
+      - "find"
+      summary: "Find documents"
+      description: "Find documents by words.\n"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "words"
+        in: "query"
+        description: "Comma separated words. Espaces are allowed."
+        required: false
+        type: "string"
+      - name: "sortasc"
+        in: "query"
+        description: "Created time ascending sort."
+        required: false
+        type: "string"
+      - name: "sortdesc"
+        in: "query"
+        description: "Created time descending sort."
+        required: false
+        type: "string"
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of results."
+        required: false
+        type: "number"
+        format: "integer"
+      responses:
+        200:
+          description: "An array of documents and how many are."
+          schema:
+            $ref: "#/definitions/inline_response_200"
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /insert:
+    post:
+      tags:
+      - "insert"
+      summary: "Insert one document"
+      description: "Insert one document. If in JSON there are '_id' key, the document will insert with these id.\n"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON to insert."
+        required: true
+        schema:
+          type: "object"
+      responses:
+        200:
+          description: "A message information that data was updated."
+          schema:
+            $ref: "#/definitions/Message"
+        201:
+          description: "A message information that data was inserted."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /remove:
+    delete:
+      tags:
+      - "delete"
+      summary: "Delete one document"
+      description: "Delete one document. JSON with 'id' key is required.\n"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON with 'id' key."
+        required: true
+        schema:
+          $ref: "#/definitions/Document_Delete"
+      responses:
+        200:
+          description: "A message information that data was deleted."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request. JSON invalid."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /update:
+    put:
+      tags:
+      - "update"
+      summary: "Update one document"
+      description: "Update document's fields. JSON with 'id' and 'content' keys is\
+        \ required. If the field does not exist, it is added (preserving all previous\
+        \ ones). \n"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "A valid JSON with 'id' and 'content' keys,"
+        required: true
+        schema:
+          $ref: "#/definitions/Document_Update"
+      responses:
+        200:
+          description: "A message information that data was updated."
+          schema:
+            $ref: "#/definitions/Message"
+        201:
+          description: "If document does not exists, It will be inserted."
+          schema:
+            $ref: "#/definitions/Message"
+        400:
+          description: "Bad request. JSON invalid."
+        500:
+          description: "Unexpected error."
+          schema:
+            $ref: "#/definitions/Message"
+  /test:
+    get:
+      tags:
+      - "test"
+      description: ""
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "A message to check available API."
+          schema:
+            $ref: "#/definitions/Message"
+definitions:
+  Document:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier representing a specific document."
+      score:
+        type: "number"
+        format: "float"
+        description: "Relevancy in finding."
+      data:
+        type: "string"
+        description: "document data."
+  Document_Update:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier representing a specific document."
+      content:
+        type: "object"
+        description: "Valid json."
+        properties: {}
+  Document_Delete:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier representing a specific document."
+  Array_Users:
+    type: "string"
+  Message:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+  Message_KPI_Time:
+    type: "object"
+    properties:
+      usersSimpatico:
+        type: "array"      
+        items:
+          $ref: "#/definitions/Array_Users"
+      usersWithoutSimpatico:
+        type: "array"      
+        items:
+          $ref: "#/definitions/Array_Users"    
+      dateStart:
+        type: "string"
+        example: "2017-10-20T08:00:00Z"
+        description: "Date in UTC"
+      dateEnd:
+        type: "string"
+        example: "2017-10-25T00:00:00Z"
+        description: "Date in UTC"
+      testing:
+        type: "boolean"
+        example: false
+        description: "If true, it use values in keys averageTimeSpentUsersSimpatico and averageTimeSpentUsersWithoutSimpatico"  
+      averageTimeSpentUsersSimpatico:
+        type: "integer"
+        description: "Average time spent by users using Simpatico"  
+      averageTimeSpentUsersWithoutSimpatico:
+        type: "integer"
+        description: "Average time spent by users without using Simpatico"
+  Message_KPI_All_Users_Time:
+    type: "object"
+    properties:
+      dateStart:
+        type: "string"
+        example: "2017-10-20T00:00:00Z"
+        description: "Date in UTC"
+      dateEnd:
+        type: "string"
+        example: "2017-10-25T00:00:00Z"
+        description: "Date in UTC"
+      testing:
+        type: "boolean"
+        example: false
+        description: "If true, it use values in keys averageTimeSpentUsersSimpatico and averageTimeSpentUsersWithoutSimpatico"  
+      averageTimeSpentUsersSimpatico:
+        type: "integer"
+        description: "Average time spent by users using Simpatico"  
+      averageTimeSpentUsersWithoutSimpatico:
+        type: "integer"
+        description: "Average time spent by users without using Simpatico"      
+  Message_KPI_Complete_Form:
+    type: "object"
+    properties:
+      usersSimpatico:
+        type: "array"      
+        items:
+          $ref: "#/definitions/Array_Users"
+      usersWithoutSimpatico:
+        type: "array"      
+        items:
+          $ref: "#/definitions/Array_Users"    
+      dateStart:
+        type: "string"
+        example: "2017-10-20T00:00:00Z"
+        description: "Date in UTC"
+      dateEnd:
+        type: "string"
+        example: "2017-10-25T00:00:00Z"
+        description: "Date in UTC"
+      testing:
+        type: "boolean"
+        example: false
+        description: "If true, it use values in keys usersSimpaticoComplete and usersWithoutSimpaticoComplete"  
+      usersSimpaticoComplete:
+        type: "integer"
+        description: "Users array to check if them complete the form"  
+      usersWithoutSimpaticoComplete:
+        type: "integer"
+        description: "Users array to check if them complete the form"      
+  Message_KPI_All_Users_Complete_Form:
+    type: "object"
+    properties:
+      dateStart:
+        type: "string"
+        example: "2017-10-20T00:00:00Z"
+        description: "Date in UTC"
+      dateEnd:
+        type: "string"
+        example: "2017-10-25T00:00:00Z"
+        description: "Date in UTC"
+      testing:
+        type: "boolean"
+        example: false
+        description: "If true, it use values in keys usersSimpaticoComplete and usersWithoutSimpaticoComplete"  
+      usersSimpaticoComplete:
+        type: "integer"
+        description: "Users array to check if them complete the form"  
+      usersWithoutSimpaticoComplete:
+        type: "integer"
+        description: "Users array to check if them complete the form"            
+  inline_response_200:
+    properties:
+      count:
+        type: "number"
+        format: "int"
+        description: "Unique identifier representing a specific document."
+      results:
+        type: "array"
+        items:
+          $ref: "#/definitions/Document"
