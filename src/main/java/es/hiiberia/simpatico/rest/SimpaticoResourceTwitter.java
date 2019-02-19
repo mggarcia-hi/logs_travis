@@ -48,6 +48,12 @@ public class SimpaticoResourceTwitter {
 	
 	
 
+	public static int suma(int a, int b) {
+		return a+b;
+	}
+	
+	
+	
     @GET
     @Path("/prueba_get")
     @Produces(MediaType.APPLICATION_JSON)
